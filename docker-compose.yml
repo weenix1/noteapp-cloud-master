@@ -1,0 +1,12 @@
+version: '2'
+services:
+    web:
+      build: .
+      image: cloud_noteapp:v0.0.3
+      environment:
+        MYENV: EXAMPLE
+      volumes:
+        - .:/code
+      command: python manage.py runserver 0.0.0.0:8000
+      ports:
+        - "8000:8000"

@@ -1,0 +1,10 @@
+db.sqlite3
+
+
+notes/__pycache__
+
+notes/migrations/__pycache__
+
+noteapp/__pycache__
+
+.idea

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Notes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <!--link rel="stylesheet" type='text/css' href="style.css"-->
+    <style>
+
+    .link_class {
+        display:block;
+        width:100%;
+        height:100%;
+        overflow: hidden;
+    }
+    html {
+        position: relative;
+        min-height: 100%;
+    }
+    footer{
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="http://127.0.0.1:8000/">
+            <img src="https://i.pinimg.com/originals/52/8e/29/528e2946f76a74030660b231c7ff1dc1.png" width="56" height="56">
+          </a>
+        </div>
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+              <a class="navbar-item" href="{% url 'dashboard' %}" >
+                <b>Home</b>
+              </a>
+        </div>
+    </nav>  
+    <!--
+        <nav class="navbar is-dark">
+            <div class="navbar-brand">
+                <a href="{% url 'editor' %}" class="navbar-item">Notes</a>
+            </div>
+
+            <div class="navbar-menu">
+                <div class="navbar-end">
+                    <a href="{% url 'editor' %}?noteid=0" class="navbar-item">+</a>
+                </div>
+            </div>
+        </nav>
+        -->
+        <section class="section">
+            <div class="columns">
+                <div class="column is-2">
+
+                    <div class="control">
+
+                        <a href="{% url 'logout' %}" class="button is-danger">Logout</a>
+
+                        <a href="{% url 'dashboard' %}" class="button is-warning">Back to dashboard</a>        
+                    </div>
+                    <div class="block"></div>
+                    <aside class="menu">
+                        <p class="menu-label"><b>Notes:</b></p>
+                        <div class="block"></div>
+                        <ul class="menu-list">
+                            {% for note in user.userNote.all %}
+                                    <div class="column has-background-warning square">
+                                            <a class="link_class" href="{% url 'editor' %}?noteid={{ note.id }}">{{ note.title }}</a>
+                                    </div>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                </div>
+
+                <div class="column is-10">
+                    <form method="post" action="{% url 'editor' %}">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="noteid" value="{{ noteid }}">
+
+                        <div class="field">
+                            <label class="label">
+                                Title
+
+                                {% if note %}
+                                    <span class="has-text-grey-light">
+                                        Created at: {{ note.created_at|date:"m/d Y" }} /
+                                        Modified at: {{ note.modified_at|date:"m/d Y" }}
+                                    </span>
+                                {% endif %}
+                            </label>
+
+                            <div class="control">
+                                <input type="text" class="input" name="title" placeholder="Title"{% if note %} value="{{ note.title }}"{% endif %}>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Content</label>
+
+                            <div class="control">
+                                <textarea class="textarea" name="content" placeholder="Content">{% if note %}{{ note.content }}{% endif %}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <a href="{% url 'editor' %}?noteid=0" class="button is-warning">New</a>
+                            </div>
+                            <div class="control">
+                                <button class="button is-primary">Save</button>
+                            </div>
+                            {% if note %}
+                                <div class="control">
+                                    <a href="{% url 'delete_note' note.id %}" class="button is-danger">Delete</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <footer class="footer">
+            <div class="content has-text-centered">
+              <p>
+                <strong>NoteApp</strong> developed by Hilary, Oleg, Nils & Tom.
+              </p>
+            </div>
+          </footer>
+
+</body>
+</html>
